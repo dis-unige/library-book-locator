@@ -6,6 +6,8 @@
 	<script src="./leaflet.js"></script>
 	<script src="./Leaflet.ImageOverlay.Rotated.js"></script>
 	<script src="./ors-js-client.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <body>
    <div id="map"></div>
@@ -17,21 +19,40 @@
    </div>
    
 	<script type="text/javascript">
-		var libraryLoc = [46.194927185965064, 6.139895360858279]
+
+		var example_JSON = [[{"longitude":"6.139895360858279",
+		"latitude":"46.194927185965064",
+		"estAccessible":"1",
+		"nomLong":"Universit\u00e9 Mail",
+		"p1Latitude":"46.19485999832131",
+		"p1Longitude":"6.138750314712524",
+		"p2Latitude":"46.19580687978871",
+		"p2Longitude":"6.1397695541381845",
+		"p3Latitude":"46.194210168266004",
+		"p3Longitude":"6.140005588531495",
+		"etage":"1",
+		"url":"http:\/\/10.20.18.116\/Leaflet\/plan-1-01_App%20copie_page-0001.jpg"},
+		{"longitude":"6.139895360858279","latitude":"46.194927185965064","estAccessible":"1","nomLong":"Universit\u00e9 Mail","p1Latitude":"46.19485999832131","p1Longitude":"6.138750314712524","p2Latitude":"46.19580687978871","p2Longitude":"6.1397695541381845","p3Latitude":"46.194210168266004","p3Longitude":"6.140005588531495","etage":"2","url":"http:\/\/10.20.18.116\/Leaflet\/plan-2-01_App%20copie_page-0001.jpg"}]]
+
+		var libraryLoc = [example_JSON[0][0]["latitude"],example_JSON[0][0]["longitude"]]; // [46.194927185965064, 6.139895360858279]
+		console.log(libraryLoc);
 		var mymap = L.map('map').setView(libraryLoc, 20);
-		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 		    maxZoom: 30,
-		    id: 'mapbox/streets-v11',
+		    id: '',
 		    tileSize: 512,
-		    zoomOffset: -1,
-		    accessToken: 'pk.eyJ1IjoiY29pbG0iLCJhIjoiY2t3Zzh6ejllMG05cjJvbWp1czZwd2d5NSJ9.yZexSLCkOBQwDR5xD5aLIg'
+		    zoomOffset: -1
 		}).addTo(mymap);
 
-		var p1 = L.latLng(46.19485999832131, 6.138750314712524);
-		var p2 = L.latLng(46.19580687978871, 6.1397695541381845);
-		var p3 = L.latLng(46.194210168266004, 6.140005588531495);
-		var img_link = ['./plan-1-01_App copie_page-0001.jpg', './plan-2-01_App copie_page-0001.jpg'];
+		var p1 = L.latLng(example_JSON[0][0]["p1Latitude"], example_JSON[0][0]["p1Longitude"]);
+		var p2 = L.latLng(example_JSON[0][0]["p2Latitude"], example_JSON[0][0]["p2Longitude"]);
+		var p3 = L.latLng(example_JSON[0][0]["p3Latitude"], example_JSON[0][0]["p3Longitude"]);
+		var img_link = []
+		for (i=0; i<example_JSON[0].length; i++){
+			img_link.push(example_JSON[0][i]["url"])
+		}
+
 		var bookFloor = 0;
 		var isLocationFound = false;
 		var currentFloor = bookFloor;
@@ -44,12 +65,31 @@
 		});
 		mymap.addLayer(overlay);
 
+		
+		var biblioIcon = L.Icon.extend({
+		options: {
+			iconSize:     [60, 60],
+			iconAnchor:   [30, 61],
+			popupAnchor:  [-3, -76]
+		}
+		});
+    
+    var bookIcon = new biblioIcon({iconUrl: 'images/marqueur.png'});
+	
+
+    var bookMarker = L.marker(libraryLoc, {icon: bookIcon});
+
+	bookMarker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+	bookMarker.addTo(mymap);
+
+
 		function onLocationFound(e){
 			var radius = e.accuracy;
 			L.marker(e.latlng).addTo(mymap);
 			L.circle(e.latlng, radius).addTo(mymap);
 			isLocationFound = true;
 			userLocation = e.latlng;
+			document.getElementById("buttonFindMe").style.visibility = "visible";
 		}
 
 		function onLocationError(e){
@@ -57,10 +97,7 @@
 		}
 
 		function findMe(){
-			console.log(isLocationFound);
 			if (isLocationFound) {
-				console.log('In the if');
-				console.log(libraryLoc);
 				var corner1 = L.latLng(libraryLoc);
 				var corner2 = userLocation;
 				var boundaries = L.latLngBounds(corner1, corner2);
@@ -68,9 +105,7 @@
 			}
 		}
 
-
 		mymap.locate(watch=true);
-
 		mymap.on('locationfound', onLocationFound);
 		// mymap.on('locationfound', travelPath);
 		mymap.on('locationerror', onLocationError);

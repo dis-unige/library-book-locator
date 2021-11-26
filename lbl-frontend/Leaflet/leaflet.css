@@ -14,7 +14,21 @@ html { height: 100% }
 
             border: none;
             padding: 0%;
+			visibility: hidden;
+
+			background-image:url("images/findMe.png");
+            background-size:cover;
 		}
+		#buttonFindMe:hover{
+            cursor: pointer;
+            background-image:url("images/findMe_hover.png");
+        }
+
+        #buttonFindMe:active{
+            cursor: pointer;
+            background-image:url("images/findMe_click.png");
+        }
+
 		#buttonPlus{
             position: absolute;
             width: 50px;
