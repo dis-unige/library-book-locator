@@ -10,8 +10,14 @@ $lang_code = $_GET['lang_code'];
 // http://10.20.18.116/lbl-backend/gps.php?batiment=library_code&secteur=$location_name&cote=$call_number
 // extraire Lat et Long du JSON
 // JSON de test : https://dis.unige.ch/slsp/locator/test.json
-$lat = $_GET['lat'];
-$long = $_GET['long'];
+
+$json = file_get_contents('test.json');
+$data = json_decode($json);
+echo $data->longitude;
+echo $data->latitude;
+
+$lat = $data->latitude;
+$long = $data->longitude;
 
 ?>
 <!DOCTYPE html>
