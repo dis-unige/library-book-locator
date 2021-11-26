@@ -31,8 +31,8 @@
 		"p3Latitude":"46.194210168266004",
 		"p3Longitude":"6.140005588531495",
 		"etage":"1",
-		"url":"http:\/\/10.20.18.116\/Leaflet\/plan-1-01_App%20copie_page-0001.jpg"},
-		{"longitude":"6.139895360858279","latitude":"46.194927185965064","estAccessible":"1","nomLong":"Universit\u00e9 Mail","p1Latitude":"46.19485999832131","p1Longitude":"6.138750314712524","p2Latitude":"46.19580687978871","p2Longitude":"6.1397695541381845","p3Latitude":"46.194210168266004","p3Longitude":"6.140005588531495","etage":"2","url":"http:\/\/10.20.18.116\/Leaflet\/plan-2-01_App%20copie_page-0001.jpg"}]]
+		"url":"https://dis.unige.ch/slsp/locator/Leaflet/plan-1-01_App%20copie_page-0001.jpg"},
+		{"longitude":"6.139895360858279","latitude":"46.194927185965064","estAccessible":"1","nomLong":"Universit\u00e9 Mail","p1Latitude":"46.19485999832131","p1Longitude":"6.138750314712524","p2Latitude":"46.19580687978871","p2Longitude":"6.1397695541381845","p3Latitude":"46.194210168266004","p3Longitude":"6.140005588531495","etage":"2","url":"https://dis.unige.ch/slsp/locator/Leaflet/plan-2-01_App copie_page-0001.jpg"}]]
 
 		var libraryLoc = [example_JSON[0][0]["latitude"],example_JSON[0][0]["longitude"]]; // [46.194927185965064, 6.139895360858279]
 		console.log(libraryLoc);
@@ -74,13 +74,13 @@
 		}
 		});
     
-    var bookIcon = new biblioIcon({iconUrl: 'images/marqueur.png'});
-	
+		var bookIcon = new biblioIcon({iconUrl: 'images/marqueur.png'});
+		
 
-    var bookMarker = L.marker(libraryLoc, {icon: bookIcon});
+		var bookMarker = L.marker(libraryLoc, {icon: bookIcon});
 
-	bookMarker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-	bookMarker.addTo(mymap);
+		bookMarker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+		bookMarker.addTo(mymap);
 
 
 		function onLocationFound(e){
