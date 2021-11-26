@@ -13,8 +13,6 @@ $lang_code = $_GET['lang_code'];
 
 $json = file_get_contents('test.json');
 $data = json_decode($json);
-echo $data->longitude;
-echo $data->latitude;
 
 $lat = $data->latitude;
 $long = $data->longitude;
