@@ -64,7 +64,7 @@ $long = $data->longitude;
 		"p3Latitude":"46.194210168266004",
 		"p3Longitude":"6.140005588531495",
 		"etage":"1",
-		"url":"https://dis.unige.ch/slsp/locator/Leaflet/plan-1-01_App%20copie_page-0001.jpg"},
+		"url":"https://dis.unige.ch/slsp/locator/lbl-frontend/Leaflet/plan-1-01_App%20copie_page-0001.jpg"},
 		{"longitude":"6.139895360858279",
 		"latitude":"46.194927185965064",
 		"estAccessible":"1",
@@ -76,7 +76,7 @@ $long = $data->longitude;
 		"p3Latitude":"46.194210168266004",
 		"p3Longitude":"6.140005588531495",
 		"etage":"2",
-		"url":"https://dis.unige.ch/slsp/locator/Leaflet/plan-2-01_App copie_page-0001.jpg"}]]
+		"url":"https://dis.unige.ch/slsp/locator/lbl-frontend/Leaflet/plan-2-01_App copie_page-0001.jpg"}]]
 
 		//
 		var libraryLoc = [example_JSON[0][0]["latitude"],example_JSON[0][0]["longitude"]]; // [46.194927185965064, 6.139895360858279]
@@ -150,17 +150,14 @@ $long = $data->longitude;
 			userLocation = e.latlng;
 
 			//remove then add marker to avoid duplicates
-			if(isLocationFound)
-				userMarker.removeFrom(mymap);
-			userMarker = L.marker(e.latlng, {icon: userIcon});
+			userMarker = L.marker(e.latlng);
+			userMarker.removeFrom(mymap);
 			userMarker.addTo(mymap);
 			
 			//remove then add circle to avoid duplicates
-			if(isLocationFound)
-				userRadiusCircle.removeFrom(mymap);
 			userRadiusCircle = L.circle(e.latlng, e.accuracy);
+			userRadiusCircle.removeFrom(mymap);
 			userRadiusCircle.addTo(mymap);
-
 
 			//first time located or re-located
 			if(!isLocationFound)
