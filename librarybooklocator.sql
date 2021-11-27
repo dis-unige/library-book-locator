@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 26 nov. 2021 à 13:29
+-- Généré le : sam. 27 nov. 2021 à 13:26
 -- Version du serveur : 10.4.21-MariaDB
 -- Version de PHP : 8.0.12
 
@@ -20,6 +20,38 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `librarybooklocator`
 --
+
+DELIMITER $$
+--
+-- Fonctions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `Padding` (`x` VARCHAR(255)) RETURNS BIGINT(255) BEGIN
+DECLARE a VARCHAR(255);
+DECLARE b VARCHAR(255);
+DECLARE c VARCHAR(255);
+IF(x RLIKE '[A-z]') THEN
+RETURN -1;
+END IF;
+SET a = SUBSTRING_INDEX(x, '.', 1);
+SET x = SUBSTRING(x,LENGTH(a)+2);
+IF(INSTR(x,'.')> 0) THEN
+SET b = SUBSTRING_INDEX(x, '.', 1);
+SET x = SUBSTRING(x,LENGTH(b)+2);
+IF(LENGTH(x)<0) THEN
+SET c = "";
+ELSE
+SET c = x;
+END IF;
+ELSE
+SET b = x;
+SET c = "";
+END IF;
+SET b = CONCAT(b,REPEAT('0', (5-LENGTH(b))));
+SET c =CONCAT(c,REPEAT('0', (5-LENGTH(c))));
+RETURN CAST(CONCAT(a,b,c) AS UNSIGNED INTEGER);
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -47,7 +79,7 @@ CREATE TABLE `espaces` (
 --
 
 INSERT INTO `espaces` (`idBatiment`, `nomLong`, `nomCourt`, `codeUnige`, `longitude`, `latitude`, `p1Latitude`, `p1Longitude`, `p2Latitude`, `p2Longitude`, `p3Latitude`, `p3Longitude`) VALUES
-(1, 'Bastions Bibliothèque Centrale', 'BCEN', '123', '123123', '123456', '1', '1', '2', '2', '3', '3');
+(1, 'Université Mail', 'Mail', 'Mail', '6.139895360858279', '46.194927185965064', '46.19485999832131', '6.138750314712524', '46.19580687978871', '6.1397695541381845', '46.194210168266004', '6.140005588531495');
 
 -- --------------------------------------------------------
 
@@ -61,6 +93,14 @@ CREATE TABLE `espacesimages` (
   `url` varchar(255) NOT NULL,
   `idBatiment` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `espacesimages`
+--
+
+INSERT INTO `espacesimages` (`idespaceimage`, `etage`, `url`, `idBatiment`) VALUES
+(1, 1, 'http://10.20.18.116/Leaflet/plan-1-01_App%20copie_page-0001.jpg', 1),
+(2, 2, 'http://10.20.18.116/Leaflet/plan-2-01_App%20copie_page-0001.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -82,6 +122,19 @@ CREATE TABLE `locator` (
   `latitude` varchar(255) NOT NULL,
   `estAccessible` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `locator`
+--
+
+INSERT INTO `locator` (`idRange`, `idBatiment`, `etage`, `secteur`, `salle`, `racineDeweyDebut`, `racineDeweyFin`, `indiceDebut`, `indiceFin`, `longitude`, `latitude`, `estAccessible`) VALUES
+(5, 1, 2, 'espace audiovisuel', 'fictions', '791.43', '791.43', 'AAA', 'ZZZ', '6.14037', '46.19520', 1),
+(6, 1, 2, 'espace audiovisuel', 'documentaires', '001', '999', 'AAA', 'ZZZ', '6.14046', '46.19517', 0),
+(7, 1, 1, 'espace presse', 'presse', '', '', '', '', '6.13977', '46.19534', 0),
+(8, 1, 1, 'espace presse', 'BD', 'BD', 'BD', 'AAA', 'ZZZ', '6.13988', '46.19537', 0),
+(9, 1, 1, 'Droit ', 'droit suisse', 'CA/CH', 'CA/CH', '', '', '6.13936', '46.19496', 0),
+(10, 1, 1, 'Droit ', 'droit généralités', 'A', 'A', '', '', '6.13960', '46.19496', 0),
+(11, 1, 2, 'traduction', '', '001', '999', 'AAA', 'ZZZ', '6.14057', '46.19496', 0);
 
 --
 -- Index pour les tables déchargées
@@ -121,13 +174,13 @@ ALTER TABLE `espaces`
 -- AUTO_INCREMENT pour la table `espacesimages`
 --
 ALTER TABLE `espacesimages`
-  MODIFY `idespaceimage` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idespaceimage` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `locator`
 --
 ALTER TABLE `locator`
-  MODIFY `idRange` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idRange` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Contraintes pour les tables déchargées
