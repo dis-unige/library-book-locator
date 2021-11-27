@@ -19,7 +19,7 @@
 
 <?php 
 // require 'conn.php';
-if(ISSET($_GET["barcode"])&&ISSET($_GET["lat"])&&ISSET($_GET["long"])){
+if(ISSET($_GET["lat"])&&ISSET($_GET["long"])){
     $barcode = $_GET["barcode"];
     $lat = $_GET["lat"];
     $long = $_GET["long"];
