@@ -40,6 +40,9 @@ switch ($requestMethod) {
                         $row_range_fail_imgs = $row_range_fail;
                         $row_range_fail_imgs[0]['urls'] = $row_imgs;
                         echo (json_encode($row_range_fail_imgs[0]));
+                        if (empty($row_range_fail)){
+                            echo(json_encode(array("Error" => "Empty Querry - query range fail")));
+                        }
                     } else { //La range retourne un résultat donc on renvoie le résultats + les images
                         /**Ajouter les images au résultat et renvoyer*/
                         $query_args_imgs3 = array(
@@ -49,6 +52,7 @@ switch ($requestMethod) {
                         $result3 = $row_range;
                         $result3[0]['urls'] = $row_imgs3;
                         echo (json_encode($result3[0]));
+                        echo(json_encode(array("ici" => "correspondance range")));
                     }
                 } else {
                     // Si la cote n'est pas numérique et n'a pas de match, renvoyer les infos du bâtiment + les images
@@ -66,7 +70,7 @@ switch ($requestMethod) {
                     /**Ajouter les images au résultat et renvoyer*/;
                     $row_range_fail_imgs = $row_range_fail;
                     $row_range_fail_imgs[0]['urls'] = $row_imgs;
-                    echo (json_encode($row_range_fail_imgs[0]));
+                    echo(json_encode(array("ici" => "querry pas num pas de match")));
                 }
             } else {
                 //On a une correspondance exacte, concaténation des urls au JSON et envoit des résultats
@@ -77,6 +81,8 @@ switch ($requestMethod) {
                 $result = $row_exact;
                 $result[0]['urls'] = $row_imgs2;
                 echo (json_encode($result[0]));
+                echo (json_encode($row_range_fail_imgs[0]));
+                echo(json_encode(array("ici" => "correspondance exacte")));
             }
         } else {
             //Paramètres invalides, on renvoit une erreur
@@ -84,6 +90,6 @@ switch ($requestMethod) {
         }
         break;
     default:
-        echo (json_encode(array("message" => "Method not supported")));
+        echo (json_encode(array("Error" => "Method not supported")));
         break;
 }
