@@ -150,14 +150,17 @@ $long = $data->longitude;
 			userLocation = e.latlng;
 
 			//remove then add marker to avoid duplicates
-			userMarker = L.marker(e.latlng);
-			userMarker.removeFrom(mymap);
+			if(isLocationFound)
+				userMarker.removeFrom(mymap);
+			userMarker = L.marker(e.latlng, {icon: userIcon});
 			userMarker.addTo(mymap);
 			
 			//remove then add circle to avoid duplicates
+			if(isLocationFound)
+				userRadiusCircle.removeFrom(mymap);
 			userRadiusCircle = L.circle(e.latlng, e.accuracy);
-			userRadiusCircle.removeFrom(mymap);
 			userRadiusCircle.addTo(mymap);
+
 
 			//first time located or re-located
 			if(!isLocationFound)
