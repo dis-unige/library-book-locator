@@ -1,3 +1,22 @@
+<?php 
+// center_lat=&center_long=&point1_lat=&point1_long=&point2_lat=&point2_long=&point3_lat=&point3_long=&url=&point1_long=&images=
+// require 'conn.php';
+$nomLong = $_GET["nomLong"];
+$nomCourt = $_GET["nomCourt"];
+$codeUnige = $_GET["codeUnige"];
+$center_lat = $_GET["center_lat"];
+$center_long = $_GET["center_long"];
+$point1_lat = $_GET["point1_lat"];
+$point1_long = $_GET["point1_long"];
+$point2_lat = $_GET["point2_lat"];
+$point2_long = $_GET["point2_long"];
+$point3_lat = $_GET["point3_lat"];
+$point3_long = $_GET["point3_long"];
+$images = $_GET["images"];
+// $now = date("Y-m-d H:i:s");
+
+// require 'conn.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,24 +49,7 @@
             <li>images : <?php echo $images; ?></li>
         </ul>
 
-<?php 
-// center_lat=&center_long=&point1_lat=&point1_long=&point2_lat=&point2_long=&point3_lat=&point3_long=&url=&point1_long=&images=
-// require 'conn.php';
-$nomLong = $_GET["nomLong"];
-$nomCourt = $_GET["nomCourt"];
-$codeUnige = $_GET["codeUnige"];
-$center_lat = $_GET["center_lat"];
-$center_long = $_GET["center_long"];
-$point1_lat = $_GET["point1_lat"];
-$point1_long = $_GET["point1_long"];
-$point2_lat = $_GET["point2_lat"];
-$point2_long = $_GET["point2_long"];
-$point3_lat = $_GET["point3_lat"];
-$point3_long = $_GET["point3_long"];
-$images = $_GET["images"];
-// $now = date("Y-m-d H:i:s");
-
-// require 'conn.php';
+<?php
 if(ISSET($_GET["center_lat"])&&ISSET($_GET["center_long"])){
     //mysqli_query($conn, "INSERT INTO `locator` VALUES('', '$barcode', '$lat', '$long', '$ip', '$now')") or die(mysqli_error());
     echo "<br/><b>Données OK</b><br/>";
