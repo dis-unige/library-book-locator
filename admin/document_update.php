@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -14,18 +16,16 @@
 	<div class="col-md-6 well">
 		<h3 class="text-primary">Locator Book</h3>
 		<hr style="border-top:1px dotted #ccc;"/>
-		<div class="col-md-12">
-<?php
-require 'conn.php';
-if(ISSET($_POST['register'])){
 
-    $barcode = $_POST['barcode'];
-    $lat = $_POST['lat'];
-    $long = $_POST['long'];
-    $ip = $_POST['ip'];
+<?php 
+// require 'conn.php';
+if(ISSET($_GET["barcode"])&&ISSET($_GET["lat"])&&ISSET($_GET["long"])){
+    $barcode = $_GET["barcode"];
+    $lat = $_GET["lat"];
+    $long = $_GET["long"];
     $now = date("Y-m-d H:i:s");
-    
-    mysqli_query($conn, "INSERT INTO `locator` VALUES('', '$barcode', '$lat', '$long', '$ip', '$now')") or die(mysqli_error());
+
+    //mysqli_query($conn, "INSERT INTO `locator` VALUES('', '$barcode', '$lat', '$long', '$ip', '$now')") or die(mysqli_error());
     
     echo "<h4>Document enregistré avec succès</h4>\n";
     echo "<br/>\n";
@@ -40,7 +40,7 @@ if(ISSET($_POST['register'])){
     echo "</div>\n";
     echo "</div>\n";
 }
-else {
+else{
     echo "<b>Error</b>\n";
     echo "<br/><br/>\n";
     echo "<a href=\"index.php\">Retour à la page d'accueil</a>";
@@ -48,8 +48,8 @@ else {
     echo "</div>\n";
     echo "</div>\n";
 }
-
 ?>
+		<div class="col-md-12">
 	</div>	
 </body>
 </html>
