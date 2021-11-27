@@ -46,7 +46,6 @@
 
 
 	<script type="text/javascript">
-		console.log(document.getElementById("myfile").value)
 		var example_JSON = [[{"longitude":"6.139895360858279",
 		"latitude":"46.194927185965064",
 		"estAccessible":"1",
@@ -99,8 +98,6 @@
 		//var center_lng = 2*marker1._latlng.lng - 1/2 * (marker2._latlng.lng + marker3._latlng.lng);
 		var center_lat = 1/2 * (marker2._latlng.lat + marker3._latlng.lat);
 		var center_lng = 1/2 * (marker2._latlng.lng + marker3._latlng.lng);
-		console.log(marker1._latlng);
-		console.log(center_lat, center_lng)
 		centerMarker = L.marker([center_lat, center_lng]).addTo(mymap);
 
 		marker1.on('drag dragend', repositionImage);
@@ -124,8 +121,6 @@
 
 		function findLibrary(lat,lng){
 			var offset = 0.0005;
-			console.log(lat,lng);
-			console.log(parseFloat(lat),parseFloat(lng))
 			fl_lat = parseFloat(lat);
 			fl_lng = parseFloat(lng);
 			if (typeof fl_lat !== 'undefined' && typeof fl_lng !== 'undefined'){
@@ -158,11 +153,10 @@
 	   		var row = table.insertRow(rowCount);
 
 			img_link.push(floorName);
-			console.log(img_link);
 			overlay.setUrl(img_link[img_link.length - 1]);
 			currentFloor = img_link.length - 1;
 
-			row.insertCell(0).innerHTML= '<input type="button" value = "Delete" id=buttonDelete onClick="Javacsript:deleteRow(this)">';
+			row.insertCell(0).innerHTML= '<input type="button" value = "Delete" id="buttonDelete" onClick="Javacsript:deleteRow(this)">';
 		  	row.insertCell(1).innerHTML= floorName;
 			
 
@@ -186,10 +180,7 @@
 				}
 				overlay.setUrl(img_link[currentFloor]);
 			}
-			console.log(index - 1)
 			img_link.splice(index - 1, 1);
-			console.log(img_link);
-			// TO DO: REMOVE ELEMENT FROM LIST
 		}
 
 		function sendData(){
@@ -215,11 +206,17 @@
 						'images': img_link
 				};
 				var xhr = new XMLHttpRequest();
-				var url = "https://dis.unige.ch/slsp/locator/admin/building_update.php";
-				xhr.open("POST", url, true);
+				var url = "https://dis.unige.ch/slsp/locator/admin/building_update.php?";
+				xhr.open("GET", url, true);
 				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 				console.log(JSON.stringify(data));
 				xhr.send(JSON.stringify(data));
+				
+				for (let key in data) {
+					url += key + '=' + data[key] + '&';
+				}
+
+				window.open(url , "Document SENT");
 			}	
 		}
 
