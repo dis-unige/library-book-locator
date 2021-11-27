@@ -205,12 +205,6 @@
 						'point3 long': marker3._latlng.lng,		
 						'images': img_link
 				};
-				var xhr = new XMLHttpRequest();
-				var url = "https://dis.unige.ch/slsp/locator/admin/building_update.php?";
-				xhr.open("GET", url, true);
-				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-				console.log(JSON.stringify(data));
-				xhr.send(JSON.stringify(data));
 				
 				for (let key in data) {
 					url += key + '=' + data[key] + '&';
