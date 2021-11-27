@@ -126,20 +126,24 @@
 		//function called when position is found/updated		
 		function onLocationFound(e){
 			userLocation = e.latlng;
-
+			
 			//remove then add marker to avoid duplicates
+			if(isLocationFound)
+				userMarker.removeFrom(mymap);
 			userMarker = L.marker(e.latlng, {icon: userIcon});
-			userMarker.removeFrom(mymap);
 			userMarker.addTo(mymap);
 			
 			//remove then add circle to avoid duplicates
+			if(isLocationFound)
+				userRadiusCircle.removeFrom(mymap);
 			userRadiusCircle = L.circle(e.latlng, e.accuracy);
-			userRadiusCircle.removeFrom(mymap);
 			userRadiusCircle.addTo(mymap);
 
 			//first time located or re-located
-			if(!isLocationFound)
+			if(!isLocationFound){
 				document.getElementById("buttonFindMe").style.visibility = "visible"; //add location button
+				bookMarker = L.marker(libraryLoc, {icon: bookIcon});
+			}
 			isLocationFound = true;	
 		}
 
