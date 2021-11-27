@@ -1,3 +1,26 @@
+<?php
+$library_code = $_GET['library_code'];
+$location_code = $_GET['location_code'];
+$location_name = $_GET['location_name'];
+$call_number = $_GET['call_number'];
+$title = $_GET['title'];
+$lang_code = $_GET['lang_code'];
+echo $library_code;
+// appel au service Web 
+// http://10.20.18.116/lbl-backend/gps.php?batiment=library_code&secteur=$location_name&cote=$call_number
+// extraire Lat et Long du JSON
+// JSON de test : https://dis.unige.ch/slsp/locator/test.json
+$myurl = 'http://10.20.18.116/lbl-backend/gps.php?batiment=Mail&secteur=' . urlencode($location_name) . '&cote=' . urlencode($call_number) ;
+$json = file_get_contents($myurl);
+$data = json_decode($json);
+
+$lat = $data->latitude;
+$long = $data->longitude;
+// echo '<pre>' . $myurl. '</pre><br/>';
+// echo '<pre>' . $myurl2. '</pre><br/>';
+// echo $location_name . ' - ' . $call_number;
+// echo $lat . ', ' . $long;
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,8 +118,7 @@
 				}
 			});
 		var bookIcon = new biblioIcon({iconUrl: 'images/marqueur.png'});
-		var userIcon = new biblioIcon({iconUrl: 'images/bonhomme.png'});
-
+		
 		//Creating Book Marker
 		var bookMarker = L.marker(libraryLoc, {icon: bookIcon});
 		bookMarker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
@@ -128,7 +150,7 @@
 			userLocation = e.latlng;
 
 			//remove then add marker to avoid duplicates
-			userMarker = L.marker(e.latlng, {icon: userIcon});
+			userMarker = L.marker(e.latlng);
 			userMarker.removeFrom(mymap);
 			userMarker.addTo(mymap);
 			
