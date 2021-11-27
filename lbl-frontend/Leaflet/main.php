@@ -118,11 +118,15 @@ $long = $data->longitude;
 				}
 			});
 		var bookIcon = new biblioIcon({iconUrl: 'images/marqueur.png'});
-		
+		var userIcon = new biblioIcon({iconUrl: 'images/bonhomme.png'});
+
 		//Creating Book Marker
+		var bookRadius = 3;
 		var bookMarker = L.marker(libraryLoc, {icon: bookIcon});
-		bookMarker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+		bookMarker.bindPopup("<b>Uni Mail</b><br><b>Lundi-Vendredi</b><br>7h30-23h00<br><b>Samedi</b><br>7h30-18h00<br><b>Dimanche</b><br>Fermé").openPopup();
 		bookMarker.addTo(mymap);
+		bookRadiusCircle = L.circle(bookMarker._latlng, bookRadius, {color: '#CF0063'}).addTo(mymap);
+
 
 		
 		//track position in real time
@@ -150,7 +154,7 @@ $long = $data->longitude;
 			userLocation = e.latlng;
 
 			//remove then add marker to avoid duplicates
-			userMarker = L.marker(e.latlng);
+			userMarker = L.marker(e.latlng, {icon: userIcon});
 			userMarker.removeFrom(mymap);
 			userMarker.addTo(mymap);
 			
