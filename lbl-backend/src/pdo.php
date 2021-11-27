@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "locator";
-$password = "weztRTi%tzr452787*DSERuiue";
+$password = "";
 $db = "locator";
 
 try {
