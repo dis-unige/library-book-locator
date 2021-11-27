@@ -33,7 +33,7 @@ $lang_code = $_GET['lang_code'];
         <input type="button" value="GET JSON" onclick="window.location.href='/lbl-backend/gps.php?batiment=Mail&secteur=<?php echo $location_name; ?>&cote=<?php echo $call_number; ?>'"/>
         <!-- <input type="button" value="LOCALISATION" onclick="window.location.href='https://dis.unige.ch/slsp/locator/Leaflet/main.html'"/> -->
         <br/><hr/>
-        <iframe src="https://dis.unige.ch/slsp/locator/Leaflet/main.html" title="Localisation" width="100%" height="500" style="border:none;></iframe>
+        <iframe src="https://dis.unige.ch/locator/Leaflet/main.html" title="Localisation" width="100%" height="500" style="border:none;></iframe>
         <div class="col-md-12">
         </div>
     </div>

@@ -21,39 +21,7 @@ SET time_zone = "+00:00";
 -- Base de données : `librarybooklocator`
 --
 
-DELIMITER $$
---
--- Fonctions
---
-CREATE DEFINER=`root`@`localhost` FUNCTION `Padding` (`x` VARCHAR(255)) RETURNS BIGINT(255) BEGIN
-DECLARE a VARCHAR(255);
-DECLARE b VARCHAR(255);
-DECLARE c VARCHAR(255);
-IF(x RLIKE '[A-z]') THEN
-RETURN -1;
-END IF;
-SET a = SUBSTRING_INDEX(x, '.', 1);
-SET x = SUBSTRING(x,LENGTH(a)+2);
-IF(INSTR(x,'.')> 0) THEN
-SET b = SUBSTRING_INDEX(x, '.', 1);
-SET x = SUBSTRING(x,LENGTH(b)+2);
-IF(LENGTH(x)<0) THEN
-SET c = "";
-ELSE
-SET c = x;
-END IF;
-ELSE
-SET b = x;
-SET c = "";
-END IF;
-SET b = CONCAT(b,REPEAT('0', (5-LENGTH(b))));
-SET c =CONCAT(c,REPEAT('0', (5-LENGTH(c))));
-RETURN CAST(CONCAT(a,b,c) AS UNSIGNED INTEGER);
-END$$
 
-DELIMITER ;
-
--- --------------------------------------------------------
 
 --
 -- Structure de la table `espaces`
