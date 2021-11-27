@@ -1,10 +1,10 @@
 <?php
 $servername = "localhost";
-$username = "backend";
-$password = "mdp123";
+$username = "locator";
+$password = "weztRTi%tzr452787*DSERuiue";
 
 try {
-    $pdo = new PDO("mysql:host=$servername;dbname=librarybooklocator", $username, $password);
+    $pdo = new PDO("mysql:host=$servername;dbname=locator", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     $error_ms = $e->getMessage();

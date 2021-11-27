@@ -33,7 +33,7 @@ $images = $_GET["images"];
     </nav>
     <div class="col-md-3"></div>
     <div class="col-md-6 well">
-        <h3 class="text-primary">Creation du bâtiment</h3>
+        <h3 class="text-primary">Library Creator</h3>
         <ul>
             <li>nomLong : <?php echo $nomLong; ?></li>
             <li>nomCourt : <?php echo $nomCourt; ?></li>
@@ -52,7 +52,7 @@ $images = $_GET["images"];
 <?php
 if(ISSET($_GET["center_lat"])&&ISSET($_GET["center_long"])){
     //mysqli_query($conn, "INSERT INTO `locator` VALUES('', '$barcode', '$lat', '$long', '$ip', '$now')") or die(mysqli_error());
-    echo "<br/><b>Données OK</b><br/>";
+    echo "<br/><b>Données enregistrées avec succès</b><br/>";
 }
 else{
     echo "<b>Error</b>\n";

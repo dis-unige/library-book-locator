@@ -53,8 +53,8 @@ $long = $data->longitude;
 		var userRadiusCircle = null;
 
 		//JSON de test
-		var example_JSON = [[{"longitude":"6.139895360858279",
-		"latitude":"46.194927185965064",
+		var example_JSON = [[{"longitude":"6.139237360858187",
+		"latitude":"46.194986185964915",
 		"estAccessible":"1",
 		"nomLong":"Universit\u00e9 Mail",
 		"p1Latitude":"46.19485999832131",
