@@ -10,16 +10,16 @@ $lang_code = $_GET['lang_code'];
 // http://10.20.18.116/lbl-backend/gps.php?batiment=library_code&secteur=$location_name&cote=$call_number
 // extraire Lat et Long du JSON
 // JSON de test : https://dis.unige.ch/slsp/locator/test.json
-$myurl = 'http://10.20.18.116/lbl-backend/gps.php?batiment=Mail&secteur=' . urlencode($location_name) . '&cote=' . urlencode($call_number) ;
-$json = file_get_contents($myurl);
+
+$json = file_get_contents('test.json');
 $data = json_decode($json);
 
 $lat = $data->latitude;
 $long = $data->longitude;
-// echo '<pre>' . $myurl. '</pre><br/>';
-// echo '<pre>' . $myurl2. '</pre><br/>';
-// echo $location_name . ' - ' . $call_number;
-// echo $lat . ', ' . $long;
+$accessible = $data->estAccessible;
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -53,9 +53,13 @@ $long = $data->longitude;
 	});
     
     var bookIcon = new biblioIcon({iconUrl: 'marqueur.png'});
-
-    L.marker([<?php echo $lat; ?>, <?php echo $long; ?>], {icon: bookIcon}).addTo(mymap);
+    var noBook = new biblioIcon({iconUrl: 'nobook.png'});
     
+    if(<?php echo $accessible; ?> == "1"){
+        L.marker([<?php echo $lat; ?>, <?php echo $long; ?>], {icon: bookIcon}).addTo(mymap);
+    }else{
+        L.marker([<?php echo $lat; ?>, <?php echo $long; ?>], {icon: noBook}).addTo(mymap);
+    }
     </script>
     
 </body>
