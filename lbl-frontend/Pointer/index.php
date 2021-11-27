@@ -29,9 +29,17 @@ $accessible = $data->estAccessible;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BiblioMap</title>
     <link rel="stylesheet" href="assets/js/leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="assets/css/style.css"/>
 </head>
 <body>
-    <div id="map" style="height: 800px;"></div>
+    <header>
+        <div class="header">
+        </div>
+    </header>
+    <main style="display: flex;">
+        <div id="map"></div>
+        <div class="rightside">bla bla bla</div>
+    </main>
 
     <script src="assets/js/leaflet/leaflet.js"></script>
 
