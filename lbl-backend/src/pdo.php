@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "locator";
-$password = "weztRTi%tzr452787*DSERuiue";
+$password = "your-password-here";
 
 try {
     $pdo = new PDO("mysql:host=$servername;dbname=locator", $username, $password);

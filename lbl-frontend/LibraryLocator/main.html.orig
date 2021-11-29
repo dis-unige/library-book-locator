@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="./leaflet.css"/>
+
+	<script src="./leaflet.js"></script>
+	<script src="./Leaflet.ImageOverlay.Rotated.js"></script>
+	<script src="./ors-js-client.js"></script>
+	<script src="jquery-3.6.0.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</head>
+<body>
+   <div id="map"></div>
+   <div>
+		<form>
+			<input type="file" id="myfile" name="myfile">
+		</form> 
+
+
+		<body >
+			<div>
+			<b>Current floor in the system ...</b>
+			<table id="floorTable"  border="1" cellpadding="2">
+				<tr>
+					<td>DELETE</td>
+					<td><b>Floor path</b></td>
+				</tr>
+			</table>
+			</div>
+
+		<input type="number" id="inputLat" name="inputLat" size="10" placeholder="Enter Latitude">
+		<input type="number" id="inputLng" name="inputLng" size="10" placeholder="Enter Longitude">
+		<input type="text" id="inputName" name="inputName" size="10" placeholder="Long Name">
+		<input type="text" id="inputNameShort" name="inputNameShort" size="10" placeholder="Short Name">
+		<input type="text" id="inputUnigeCode" name="inputUnigeCode" size="10" placeholder="Unige Code">
+		<button id='buttonSendVariables' onclick='sendData()'>SEND DATA</button>
+
+		<button id='buttonPlus' onclick='changeFloor(1)'></button>
+		<button id='buttonMinus' onclick='changeFloor(-1)'></button>
+		<button id='buttonFindLibrary' onclick='findLibrary(document.getElementById("inputLat").value, document.getElementById("inputLng").value)'>Go there</button>
+		<button id='buttonAddFloor' onclick='addFloor("./plans/",document.getElementById("myfile").files[0].name)'>Add Floor</button>
+	
+	</div>
+
+
+
+	<script type="text/javascript">
+		var example_JSON = [[{"longitude":"6.139895360858279",
+		"latitude":"46.194927185965064",
+		"estAccessible":"1",
+		"nomLong":"Universit\u00e9 Mail",
+		"p1Latitude":"46.19485999832131",
+		"p1Longitude":"6.138750314712524",
+		"p2Latitude":"46.19580687978871",
+		"p2Longitude":"6.1397695541381845",
+		"p3Latitude":"46.194210168266004",
+		"p3Longitude":"6.140005588531495",
+		"etage":"1",
+		"url":"https://dis.unige.ch/locator/Leaflet/plan-1-01_App%20copie_page-0001.jpg"},
+		{"longitude":"6.139895360858279","latitude":"46.194927185965064","estAccessible":"1","nomLong":"Universit\u00e9 Mail","p1Latitude":"46.19485999832131","p1Longitude":"6.138750314712524","p2Latitude":"46.19580687978871","p2Longitude":"6.1397695541381845","p3Latitude":"46.194210168266004","p3Longitude":"6.140005588531495","etage":"2","url":"https://dis.unige.ch/locator/Leaflet/plan-2-01_App copie_page-0001.jpg"}]]
+
+		var libraryLoc = [example_JSON[0][0]["latitude"],example_JSON[0][0]["longitude"]]; // [46.194927185965064, 6.139895360858279]
+		var mymap = L.map('map').setView(libraryLoc, 20);
+		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		    maxZoom: 30,
+		    id: '',
+		    tileSize: 512,
+		    zoomOffset: -1
+		}).addTo(mymap);
+
+		var p1 = L.latLng(example_JSON[0][0]["p1Latitude"], example_JSON[0][0]["p1Longitude"]);
+		var p2 = L.latLng(example_JSON[0][0]["p2Latitude"], example_JSON[0][0]["p2Longitude"]);
+		var p3 = L.latLng(example_JSON[0][0]["p3Latitude"], example_JSON[0][0]["p3Longitude"]);
+		var img_link = []
+		//for (i=0; i<example_JSON[0].length; i++){
+		//	img_link.push(example_JSON[0][i]["url"])
+		//}
+
+		var bookFloor = 0;
+		var isLocationFound = false;
+		var currentFloor = bookFloor;
+		var userLocation = null;
+		
+		var overlay = L.imageOverlay.rotated("./plans/default_building.png", p1, p2, p3, {
+			opacity: 0.5,
+			attribution: "UniMail",
+			interactive: false
+		});
+
+		mymap.addLayer(overlay);
+
+		var marker1 = L.marker(p1, {draggable: true} ).addTo(mymap),
+		    marker2 = L.marker(p2, {draggable: true} ).addTo(mymap),
+		    marker3 = L.marker(p3, {draggable: true} ).addTo(mymap);
+		//var center_lat = 2*marker1._latlng.lat - 1/2 * (marker2._latlng.lat + marker3._latlng.lat);
+		//var center_lng = 2*marker1._latlng.lng - 1/2 * (marker2._latlng.lng + marker3._latlng.lng);
+		var center_lat = 1/2 * (marker2._latlng.lat + marker3._latlng.lat);
+		var center_lng = 1/2 * (marker2._latlng.lng + marker3._latlng.lng);
+		centerMarker = L.marker([center_lat, center_lng]).addTo(mymap);
+
+		marker1.on('drag dragend', repositionImage);
+		marker2.on('drag dragend', repositionImage);
+		marker3.on('drag dragend', repositionImage);
+
+		function changeFloor(step) {
+
+			if (currentFloor + step < 0){
+				currentFloor = 0;
+			}
+			else if (currentFloor + step > img_link.length - 1){
+				currentFloor = img_link.length;
+			}
+			else{
+				currentFloor += step;
+				overlay.setUrl(img_link[currentFloor])
+			}
+				
+		}
+
+		function findLibrary(lat,lng){
+			var offset = 0.0005;
+			fl_lat = parseFloat(lat);
+			fl_lng = parseFloat(lng);
+			if (typeof fl_lat !== 'undefined' && typeof fl_lng !== 'undefined'){
+				mymap.setView([fl_lat, fl_lng], 20);
+
+				var topleft    = L.latLng(fl_lat + offset, fl_lng - offset),
+					topright   = L.latLng(fl_lat + offset, fl_lng + offset),
+					bottomleft = L.latLng(fl_lat - offset, fl_lng - offset);
+
+				marker1.setLatLng(topleft);
+				marker2.setLatLng(topright);
+				marker3.setLatLng(bottomleft);
+
+				repositionImage();
+			}
+			
+		}
+
+		function repositionImage() {
+			overlay.reposition(marker1.getLatLng(), marker2.getLatLng(), marker3.getLatLng());
+			center_lat = 1/2 * (marker2._latlng.lat + marker3._latlng.lat);
+			center_lng = 1/2 * (marker2._latlng.lng + marker3._latlng.lng);
+			centerMarker.setLatLng(L.latLng([center_lat, center_lng]));
+		};
+		
+		function addFloor(path, value){
+			var floorName = path+value;
+			var table = document.getElementById("floorTable");
+	   		var rowCount = table.rows.length;
+	   		var row = table.insertRow(rowCount);
+
+			img_link.push(floorName);
+			overlay.setUrl(img_link[img_link.length - 1]);
+			currentFloor = img_link.length - 1;
+
+			row.insertCell(0).innerHTML= '<input type="button" value = "Delete" id="buttonDelete" onClick="Javacsript:deleteRow(this)">';
+		  	row.insertCell(1).innerHTML= floorName;
+			
+
+
+		}
+		
+		function deleteRow(obj) {
+			var index = obj.parentNode.parentNode.rowIndex;
+			var table = document.getElementById("floorTable");
+			table.deleteRow(index);
+
+			if (img_link.length == 1){
+				overlay.setUrl('./plans/default_building.png');
+			}
+			else if (currentFloor == (index - 1)){
+				if (currentFloor == 0){
+					currentFloor = 1;
+				}
+				else{
+					currentFloor -= 1;
+				}
+				overlay.setUrl(img_link[currentFloor]);
+			}
+			img_link.splice(index - 1, 1);
+		}
+
+		function sendData(){
+
+			if (document.getElementById("inputName").value == '' || 
+				document.getElementById("inputNameShort").value == '' ||
+				document.getElementById("inputUnigeCode").value == '' ||
+				img_link.length == 0){
+				alert("Some fields are empty!");
+			}
+			else{
+				data = {'nomLong':  document.getElementById("inputName").value,
+						'nomCourt':  document.getElementById("inputNameShort").value,
+						'codeUnige': document.getElementById("inputUnigeCode").value,
+						'center long': centerMarker._latlng.lng,
+						'center lat': centerMarker._latlng.lat,
+						'point1 lat': marker1._latlng.lat,
+						'point1 long': marker1._latlng.lng,
+						'point2 lat': marker2._latlng.lat,
+						'point2 long': marker2._latlng.lng,					
+						'point3 lat': marker3._latlng.lng,		
+						'point3 long': marker3._latlng.lng,		
+						'images': img_link
+				};
+<<<<<<< HEAD
+				var xhr = new XMLHttpRequest();
+				var url = "https://dis.unige.ch/locator/admin/building_update.php?";
+				xhr.open("GET", url, true);
+				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+				console.log(JSON.stringify(data));
+				xhr.send(JSON.stringify(data));
+=======
+>>>>>>> e2c92773943958e32a1c119b9dcd06dc6976a284
+				
+				for (let key in data) {
+					url += key + '=' + data[key] + '&';
+				}
+
+				window.open(url , "Document SENT");
+			}	
+		}
+
+	</script>
+
+</body>
+</html>
